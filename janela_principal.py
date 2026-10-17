@@ -1,19 +1,25 @@
+import json
 from tkinter import *
-import tkinter as tk
 from tkinter import messagebox
+
 
 
 class Janela_Cadastro:
     def __init__(self, janela_login):
         self.janela_login = janela_login
         self.janela_login.title("Login")
-        self.janela_login.geometry("400x300")
-        self.janela_login.resizable(True, True)
+        self.janela_login.geometry("500x400")
+        self.janela_login.resizable(False, False)
+
+        # Variável para o checkbutton "Lembrar-me", senha e cadastro
+        self.lembrar_check = BooleanVar()
+        self.senha_entry = StringVar()
+        self.cadastro_entry = StringVar()
 
         self.iniciar_login()
 
     def iniciar_login(self):
-        #Container principal:
+#Container principal:
         container = Frame(
             self.janela_login, 
             bg="#81FFFF"
@@ -26,7 +32,7 @@ class Janela_Cadastro:
         )
 
 
-        #card principal
+#card principal
         card = Frame(
             container, 
             bg="white",
@@ -48,7 +54,7 @@ class Janela_Cadastro:
         titulo.pack(pady=(20, 5))
 
 
-        #Cadastro de usuário==============
+#Cadastro de usuário==============
         cadastre_usuário = Label(
             card, 
             text="Cadastre-se", 
@@ -61,11 +67,12 @@ class Janela_Cadastro:
         self.cadastro_entry = Entry(
             card,
             font=("Arial", 10),
+            textvariable=self.cadastro_entry
         )
         self.cadastro_entry.pack(pady=(0, 30))
 
 
-        #Senha de usuário======================
+#Senha de usuário======================
         Senha = Label(
             card, 
             text="Senha", 
@@ -78,6 +85,7 @@ class Janela_Cadastro:
         self.senha_entry = Entry(
             card,
             font=("Arial", 10),
+            textvariable=self.senha_entry,
             show="*",
         )
         self.senha_entry.pack(pady=(0, 30))
@@ -92,22 +100,62 @@ class Janela_Cadastro:
         )
         self.verificar.pack(pady=(20, 0))
 
+# Checkbutton lembrar-me===============
+        self.check_lembrar = Checkbutton(
+            card,
+            text="Lembrar-me",
+            font=("Arial", 10),
+            bg="white",
+            fg="#030303",
+            variable=self.lembrar_check
+        )
+        self.check_lembrar.pack(pady=(10, 0))
+        
 
-    # Verificar Cadastro de usuário e senha
+
+
+# Verificar Cadastro de usuário e senha e checkbutton lembrar-me
     def verificar_cadastro(self):
-        self.textodigitado = self.cadastro_entry.get()
-        if not self.textodigitado:
+        if not self.cadastro_entry.get():
             self.mensagemErro = messagebox.showerror("Erro", "Digite um nome de usuário para concluir o cadastro")
             return
-        self.senhadigitada = self.senha_entry.get()
-        if not self.senhadigitada:
+        if not self.senha_entry.get():
             self.mensagemErro = messagebox.showerror("Erro", "Digite uma senha para concluir o cadastro")
             return
-        self.mensagemSucesso = messagebox.showinfo("Sucesso", "Cadastro concluído com sucesso!")
+        if len(self.senha_entry.get()) < 9:
+            self.mensagemErro = messagebox.showerror("Erro", "A senha deve ter pelo menos 9 caracteres")
+            return
+        if self.lembrar_check.get():
+            # Lógica para lembrar o usuário
+            self.senha_entry = self.senha_entry.get()
+            self.cadastro_entry = self.cadastro_entry.get()
 
+            #Valores:
+            self.Dados = {
+                "usuario": self.cadastro_entry,
+                "senha": self.senha_entry
+            }
+            with open("config.json", "w", encoding="utf-8") as arquivo:
+            # json.dump pega o dicionário 'dados' e o escreve dentro do 'arquivo'
+                json.dump(self.Dados, arquivo, indent=4) 
+                
+            print("Dados salvos com sucesso!")
+
+        self.mensagemSucesso = messagebox.showinfo("Sucesso", "Cadastro concluído com sucesso!")
+        self.abrir_janela_principal()
+
+# Abrir a janela principal após o cadastro
+    def abrir_janela_principal(self):
+        self.janela_login.destroy()
+        self.janela_principal = Tk()
+        janela = Janela_Principal(self.janela_principal)
+        janela.janela.mainloop()
+ 
+
+#Janela principal após o cadastro
 class Janela_Principal:
-    def __init__(self, janela):
-        self.janela = janela
+    def __init__(self, janela_principal):
+        self.janela = janela_principal
         self.janela.title("Janela Principal")
         self.janela.geometry("400x300")
         self.janela.resizable(True, True)
