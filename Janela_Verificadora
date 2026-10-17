@@ -1,0 +1,12 @@
+import os as os
+import json
+from tkinter import *
+from tkinter import messagebox
+from janela_principal import *
+
+class Janela_Verificadora:
+    def __init__(self, janela_verificadora):
+        self.janela_verificadora= janela_verificadora
+        self.janela_verificadora.title("Verificacão")
+        self.janela_verificadora.geometry("500x400")
+        self.janela_verificadora.resizable(False, False)
