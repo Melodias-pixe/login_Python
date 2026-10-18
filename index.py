@@ -1,7 +1,8 @@
 from tkinter import *
 import tkinter as tk
-import janela_principal
+from janela_cadastro import Janela_Cadastro
+
 if __name__ == "__main__":
-    principal = Tk()
-    janela = janela_principal.Janela_Cadastro(principal)
-    principal.mainloop()
+    janela_cadastro = Tk()
+    Janela_cadastro = Janela_Cadastro(janela_cadastro)
+    janela_cadastro.mainloop()
