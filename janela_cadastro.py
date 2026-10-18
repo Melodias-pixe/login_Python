@@ -143,7 +143,7 @@ class Janela_Cadastro:
             self.mensagemErro = messagebox.showerror("Erro", "Digite uma senha para concluir o cadastro")
             return
         if len(self.senha_entry.get()) <= 6:
-            self.mensagemErro = messagebox.showerror("Erro", "A senha deve ter pelo menos 9 caracteres")
+            self.mensagemErro = messagebox.showerror("Erro", "A senha deve ter pelo menos 6 caracteres")
             return
         if self.lembrar_check.get():
             self.salvar_Json()
