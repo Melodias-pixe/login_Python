@@ -3,13 +3,15 @@ import json
 from tkinter import *
 from tkinter import messagebox
 
+
 #Janela principal após o cadastro
 class Janela_Principal:
     def __init__(self, janela_principal):
         self.janela = janela_principal
         self.janela.title("Janela Principal")
-        self.janela.geometry("400x300")
+        self.janela.geometry("500x400")
         self.janela.resizable(True, True)
+        self.janela.state("zoomed")
 
         self.iniciar_janela()
 

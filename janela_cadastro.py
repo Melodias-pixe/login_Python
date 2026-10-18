@@ -3,15 +3,16 @@ import json
 from tkinter import *
 from tkinter import messagebox
 from janela_principal import *
-from  janela_verificadora import *
+from janela_verificadora import *
 
 
 class Janela_Cadastro:
     def __init__(self, janela_cadastro):
         self.janela_cadastro = janela_cadastro
         self.janela_cadastro.title("Cadastro")
-        self.janela_cadastro.geometry("500x400")
+        self.janela_cadastro.geometry("700x450")
         self.janela_cadastro.resizable(True, True)
+        self.janela_cadastro.state("zoomed")
 
         # Variável para o checkbutton "Lembrar-me", senha e cadastro
         self.lembrar_check = BooleanVar()
@@ -141,7 +142,7 @@ class Janela_Cadastro:
         if not self.senha_entry.get():
             self.mensagemErro = messagebox.showerror("Erro", "Digite uma senha para concluir o cadastro")
             return
-        if len(self.senha_entry.get()) < 9:
+        if len(self.senha_entry.get()) <= 6:
             self.mensagemErro = messagebox.showerror("Erro", "A senha deve ter pelo menos 9 caracteres")
             return
         if self.lembrar_check.get():
@@ -151,10 +152,11 @@ class Janela_Cadastro:
 
 
     def verificação(self):
-        if os.path.exists("config.json"):
-            self.abrir__janela_verificadora
-        else:
+        if not os.path.exists("config.json"):
             self.mensagemSucesso = messagebox.showerror("Login não Encontrado", "Seu Login não foi encontrado, por favor, faça um")
+            return
+        self.abrir__janela_verificadora()
+            
 
     
 #JSON======================
@@ -175,30 +177,15 @@ class Janela_Cadastro:
         self.mensagemSucesso = messagebox.showinfo("Sucesso","Login salvo com Sucesso!")
 
 
-
-    def restaurar_Json(self):
-        if os.path.exists("config.json"):
-            with open("config.json", "r", encoding="utf-8") as arquivo:
-                # json.load lê o conteúdo do arquivo e transforma de volta em um dicionário Python
-                dados = json.load(arquivo)
-                
-                # Insere os dados recuperados de volta nos campos Entry do Tkinter
-                self.cadastro_entry.set(dados.get("usuario", ""))
-                self.senha_entry.set(dados.get("senha", ""))
-                self.abrir_janela_principal()
-
-
-
-# Abrir a janela principal após o cadastro
-    def abrir_janela_principal(self):
-        self.janela_cadastro.destroy()
-        self.janela_principal = Tk()
-        janela = Janela_Principal(self.janela_principal)
-        janela.janela.mainloop() 
-
 # Abrir janela verificadora
     def abrir__janela_verificadora(self):
         self.janela_cadastro.destroy()
         self.janela_verificadora = Tk()
         janela = Janela_Verificadora(self.janela_verificadora)
         janela.janela_verificadora.mainloop()
+
+    def abrir_janela_principal(self):
+            self.janela_cadastro.destroy()
+            self.janela_principal = Tk()
+            janela = Janela_Principal(self.janela_principal)
+            janela.janela.mainloop() 
